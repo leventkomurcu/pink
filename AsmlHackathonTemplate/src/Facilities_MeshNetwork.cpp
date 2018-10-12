@@ -16,7 +16,7 @@
 namespace Facilities {
 
 const uint16_t MeshNetwork::PORT = 5555;
-
+const uint32_t ids[] = { 0x3A588228,0x3A588750,0x3A587FDB,0xEBB2A2BD};
 //! Construct only.
 //! \note Does not construct and initialize in one go to be able to initialize after serial debug port has been opened.
 MeshNetwork::MeshNetwork()
@@ -37,6 +37,15 @@ void MeshNetwork::initialize(const __FlashStringHelper *prefix, const __FlashStr
    // Set debug messages before init() so that you can see startup messages.
    m_mesh.setDebugMsgTypes( ERROR | STARTUP );  // To enable all: ERROR | MESH_STATUS | CONNECTION | SYNC | COMMUNICATION | GENERAL | MSG_TYPES | REMOTE
    m_mesh.init( prefix, password, &taskScheduler, MeshNetwork::PORT, WIFI_AP_STA, 5, 0, 5);
+
+    for (int i=0;i<4;i++)
+    {
+        if(ids[i]==m_mesh.getNodeId()){
+            _internalId = i;
+            break;
+        }
+            
+    }
 }
 
 //! Update mesh; forward call to painlessMesh.
@@ -79,23 +88,24 @@ void MeshNetwork::newConnection(uint32_t nodeId)
 
 void MeshNetwork::updateNodeId(void)
 {
-    std::list<uint32_t> nodeids = m_mesh.getNodeList();
+    /*std::list<uint32_t> nodeids = m_mesh.getNodeList();
     nodeids.push_back(m_mesh.getNodeId());
     if (nodeids.size() > 0)
     {
         nodeids.sort();
         int32_t count=0;
         for (auto const& i : nodeids) {
+            MY_DEBUG_PRINTF(" %X\n",i);
             if (i == m_mesh.getNodeId())
             {
-                _internalId = count;
+                = count;
                 MY_DEBUG_PRINTF("new Internal Id %X\n",_internalId);
-                break;
+                //break;
             }
 
             count++;
         }
-    }
+    }*/
 }
 void MeshNetwork::meshChanged(void)
 {
