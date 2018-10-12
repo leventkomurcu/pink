@@ -119,14 +119,17 @@ void ExampleDisplayTask::execute()
     
     if (m_image_index != imageId)
     {   
-        m_lmd.clear();
-        m_lmd.display();
+
         if (count < 10)
+        {
+            imageId = BLANK;
             count ++;
+        }
+            
         else{
 
-        imageId= m_image_index;
-        count=0;
+            imageId= m_image_index;
+            count=0;
         }
     }
 
