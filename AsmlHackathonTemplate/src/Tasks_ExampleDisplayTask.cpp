@@ -26,8 +26,8 @@ const unsigned long ExampleDisplayTask::POLL_DELAY_MS = 100;
 
 int m_image[6][32][32];
 int m_image_index = 0;
-const int BLANK = 0;
-const int CROSS = 1;
+const int BLANK = 1;
+const int CROSS = 0;
 const int MAX_DISK = 2;
 
 void init_figures() {
