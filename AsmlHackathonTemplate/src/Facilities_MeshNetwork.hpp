@@ -38,7 +38,6 @@ public:
 
 
 
-private:
    static const uint16_t PORT;
 
    painlessMesh       m_mesh;
