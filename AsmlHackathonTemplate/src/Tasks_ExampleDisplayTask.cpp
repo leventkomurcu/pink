@@ -30,6 +30,7 @@ const int BLANK = 1;
 const int CROSS = 0;
 const int MAX_DISK = 2;
 const int CIRCLE = 3;
+const int DISK_5 = 4;
 
 void init_figures() {
     for (int i = 0; i < 32; i++) {
@@ -53,6 +54,19 @@ void init_figures() {
                 m_image[MAX_DISK][x][y] = 1;
             } else {
                 m_image[MAX_DISK][x][y] = 0;
+            }
+        }
+    }
+
+    double r5 = 4.955;
+    for (int x = 0; x < 32; x++) {
+        for (int y = 0; y < 32; y++) {
+            double dx = abs(x - mx);
+            double dy = abs(y - my);
+            if (dx * dx + dy * dy <= r5*r5) {
+                m_image[DISK_5][x][y] = 1;
+            } else {
+                m_image[DISK_5][x][y] = 0;
             }
         }
     }
