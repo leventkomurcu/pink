@@ -110,12 +110,25 @@ ExampleDisplayTask::ExampleDisplayTask(Facilities::MeshNetwork& mesh) :
 void ExampleDisplayTask::execute()
 {
     static int currentId=-1;
-
+    static int imageId;
+    static int count = 0;
     if(m_mesh._internalId!=currentId)
     {
         currentId=m_mesh._internalId;
     }
     
+    if (m_image_index != imageId)
+    {   
+        m_lmd.clear();
+        m_lmd.display();
+        if (count < 10)
+            count ++;
+        else{
+
+        imageId= m_image_index;
+        count=0;
+        }
+    }
 
   /* m_lmd.clear();
    for (int x=0;x<31;x++)
@@ -129,7 +142,7 @@ void ExampleDisplayTask::execute()
         m_lmd.clear();
         for (int cx = 0; cx < 32; cx++) {
             for (int cy = 0; cy < 8; cy++) {
-                m_lmd.setPixel(cx, cy, m_image[m_image_index][cx][currentId * 8 + cy]);
+                m_lmd.setPixel(cx, cy, m_image[imageId][cx][currentId * 8 + cy]);
             }
         }
         m_lmd.display();
