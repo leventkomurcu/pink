@@ -65,27 +65,12 @@ ExampleDisplayTask::ExampleDisplayTask(Facilities::MeshNetwork& mesh) :
 {
    m_lmd.setEnabled(true);
    m_lmd.setIntensity(LEDMATRIX_INTENSITY);
-    m_lmd.clear();
-
-    image[0][15]=0xFF;
-    image[1][15]=0xff;
-    image[2][15]=0xff;
-    image[3][15]=0xff;
-
-    for (int i=0;i<32;i++)
-    {
-        image[1][i] |= 0x80;
-        image[2][i] |= 0x01;
-    }
-
-     m_lmd.display();
+   m_lmd.clear();
+   m_lmd.display();
    init_figures();
    m_mesh.onReceive(std::bind(&ExampleDisplayTask::receivedCb, this, std::placeholders::_1, std::placeholders::_2));
 
 }
-
-int my_part = 1; // 0, 1, 2 or 3
-int cnt = 0;
 
 //! Update display
 void ExampleDisplayTask::execute()
@@ -95,17 +80,6 @@ void ExampleDisplayTask::execute()
     if(m_mesh._internalId!=currentId)
     {
         currentId=m_mesh._internalId;
-        
-        if(m_mesh._internalId >=0)
-        {
-                m_lmd.clear();
-        for (int x=0;x<31;x++)
-            {
-                m_lmd.setColumn(x,image[m_mesh._internalId][x]);
-            }
-            m_lmd.display();
-        }
-
     }
     
 
@@ -116,19 +90,16 @@ void ExampleDisplayTask::execute()
     }
    m_lmd.display();*/
 
-   /*
-    cnt++;
-    if (cnt % 10 == 0) {
-        my_part = (my_part+1) % 4;
-    }
-    m_lmd.clear();
-    for (int cx = 0; cx < 32; cx++) {
-       for (int cy = 0; cy < 8; cy++) {
-           m_lmd.setPixel(cx, cy, m_full[cx][my_part * 8 + cy]);
+   
+    if (currentId >= 0) {
+        m_lmd.clear();
+        for (int cx = 0; cx < 32; cx++) {
+            for (int cy = 0; cy < 8; cy++) {
+                m_lmd.setPixel(cx, cy, m_full[cx][currentId * 8 + cy]);
+            }
         }
+        m_lmd.display();
     }
-    m_lmd.display();
-	*/
 }
 
 void ExampleDisplayTask::receivedCb(Facilities::MeshNetwork::NodeId nodeId, String& msg)
