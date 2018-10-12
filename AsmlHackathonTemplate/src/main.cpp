@@ -40,7 +40,7 @@ wdt_disable();
     server.on("/", HTTP_GET, [&](AsyncWebServerRequest *request){
         list<uint32_t> nodeList = meshNetwork.m_mesh.getNodeList();
 
-        StaticJsonBuffer<500> jsonBuffer;
+        StaticJsonBuffer<100> jsonBuffer;
         JsonObject& root = jsonBuffer.createObject();
         root["poolSize"] = (int)nodeList.size();
         root["currentTime"] = (int)meshNetwork.m_mesh.getNodeTime();

@@ -24,11 +24,12 @@ const int ExampleDisplayTask::LEDMATRIX_INTENSITY = 5;
 const int ExampleDisplayTask::LEDMATRIX_CS_PIN = 16;
 const unsigned long ExampleDisplayTask::POLL_DELAY_MS = 100;
 
-int m_image[6][32][32];
+char m_image[6][32][32];
 int m_image_index = 0;
 const int BLANK = 1;
 const int CROSS = 0;
 const int MAX_DISK = 2;
+const int CIRCLE = 3;
 
 void init_figures() {
     for (int i = 0; i < 32; i++) {
@@ -52,6 +53,23 @@ void init_figures() {
                 m_image[MAX_DISK][x][y] = 1;
             } else {
                 m_image[MAX_DISK][x][y] = 0;
+            }
+        }
+    }
+
+    mx = 15.5;
+    my = 15.5;
+    double r_in = 15;
+    double r_out = 15.9;
+    for (int x = 0; x < 32; x++) {
+        for (int y = 0; y < 32; y++) {
+            double dx = abs(x - mx);
+            double dy = abs(y - my);
+            double d = dx * dx + dy * dy;
+            if (d <= r_out*r_out && d >= r_in*r_in) {
+                m_image[CIRCLE][x][y] = 1;
+            } else {
+                m_image[CIRCLE][x][y] = 0;
             }
         }
     }
