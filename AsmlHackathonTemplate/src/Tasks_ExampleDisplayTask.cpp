@@ -73,7 +73,7 @@ void init_figures() {
 
     mx = 15.5;
     my = 15.5;
-    double r_in = 15;
+    double r_in = 15.12;
     double r_out = 15.955;
     for (int x = 0; x < 32; x++) {
         for (int y = 0; y < 32; y++) {
