@@ -38,6 +38,7 @@ void MeshNetwork::initialize(const __FlashStringHelper *prefix, const __FlashStr
    m_mesh.setDebugMsgTypes( ERROR | STARTUP );  // To enable all: ERROR | MESH_STATUS | CONNECTION | SYNC | COMMUNICATION | GENERAL | MSG_TYPES | REMOTE
    m_mesh.init( prefix, password, &taskScheduler, MeshNetwork::PORT, WIFI_AP_STA, 5, 0, 5);
 
+ MY_DEBUG_PRINTF("%X\n",m_mesh.getNodeId());
     for (int i=0;i<4;i++)
     {
         if(ids[i]==m_mesh.getNodeId()){

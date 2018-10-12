@@ -44,7 +44,7 @@ void init_figures() {
 
     double mx = 15.5;
     double my = 15.5;
-    double r = 15.9;
+    double r = 15.955;
     for (int x = 0; x < 32; x++) {
         for (int y = 0; y < 32; y++) {
             double dx = abs(x - mx);
@@ -60,7 +60,7 @@ void init_figures() {
     mx = 15.5;
     my = 15.5;
     double r_in = 15;
-    double r_out = 15.9;
+    double r_out = 15.955;
     for (int x = 0; x < 32; x++) {
         for (int y = 0; y < 32; y++) {
             double dx = abs(x - mx);

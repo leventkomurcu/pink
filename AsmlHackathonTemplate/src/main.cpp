@@ -47,7 +47,7 @@ wdt_disable();
         
         if (request->hasArg("IMAGE")){
             image = request->arg("IMAGE");
-            meshNetwork.m_mesh.sendBroadcast(image);
+            meshNetwork.m_mesh.sendBroadcast(image,true);
         }
 
         root["IMAGE"] = image;
@@ -70,7 +70,7 @@ wdt_disable();
             image = request->getParam(0)->value();
             MY_DEBUG_PRINTLN(request->getParam(0)->name());
             MY_DEBUG_PRINTLN(image);
-            meshNetwork.m_mesh.sendBroadcast(image);
+            meshNetwork.m_mesh.sendBroadcast(image,true);
             request->send(200);
         } else {
             request->send(204);
