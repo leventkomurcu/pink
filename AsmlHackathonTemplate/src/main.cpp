@@ -20,6 +20,7 @@ Tasks::ExampleDisplayTask  exampleDisplayTask(meshNetwork);
 }
 
 AsyncWebServer server(80);
+String image = "No image yet";
 
 //! Called once at board startup.
 void setup()
@@ -43,9 +44,17 @@ void setup()
         JsonObject& root = jsonBuffer.createObject();
         root["poolSize"] = (int)nodeList.size();
         root["currentTime"] = (int)meshNetwork.m_mesh.getNodeTime();
-        String s;
-        root.printTo(s);
-        request->send(200, "application/json", s);
+        
+        if (request->hasArg("IMAGE")){
+            image = request->arg("IMAGE");
+            //mesh.sendBroadcast(msg);
+        }
+
+        root["IMAGE"] = image;
+
+        String response;
+        root.printTo(response);
+        request->send(200, "application/json", response);
         // if (request->hasArg("BROADCAST")){
         // String msg = request->arg("BROADCAST");
         // mesh.sendBroadcast(msg);
