@@ -41,8 +41,16 @@ public:
    static const uint16_t PORT;
 
    painlessMesh       m_mesh;
-
+int32_t _internalId;
    void receivedCb(NodeId transmitterNodeId, String& msg);
+private:
+   
+   void updateNodeId(void);
+
+
+   void droppedConnection(uint32_t nodeId);
+    void newConnection(uint32_t nodeId);
+    void meshChanged(void);
 
 
 };

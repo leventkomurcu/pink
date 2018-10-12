@@ -26,7 +26,7 @@ String image = "No image yet";
 void setup()
 {
    MY_DEBUG_BEGIN(115200);
-
+wdt_disable();
    // Create MeshNetwork
    meshNetwork.initialize(F("teampink"), F("teampink"), taskScheduler);
 

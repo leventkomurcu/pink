@@ -23,9 +23,12 @@ MeshNetwork::MeshNetwork()
 {
    m_mesh.onReceive(std::bind(&MeshNetwork::receivedCb, this, std::placeholders::_1, std::placeholders::_2));
    MY_DEBUG_PRINTF("%s\n", m_mesh.getStationIP().toString().c_str());
-   //m_mesh.onNewConnection(...);
-   //m_mesh.onChangedConnections(...);
-   //m_mesh.onNodeTimeAdjusted(...);
+    m_mesh.onReceive(std::bind(&MeshNetwork::receivedCb, this, std::placeholders::_1, std::placeholders::_2));
+   m_mesh.onNewConnection(std::bind(&MeshNetwork::droppedConnection, this, std::placeholders::_1));
+    m_mesh.onDroppedConnection(std::bind(&MeshNetwork::newConnection, this, std::placeholders::_1));
+    m_mesh.onChangedConnections(std::bind(&MeshNetwork::meshChanged,this));
+    _internalId = -1;
+
 }
 
 // Initialize mesh network.
@@ -62,6 +65,43 @@ void MeshNetwork::receivedCb(NodeId transmitterNodeId, String& msg)
 {
    MY_DEBUG_PRINTF("Data received from node: %u; msg: %s\n", transmitterNodeId, msg.c_str());
 }
+
+
+void MeshNetwork::droppedConnection(uint32_t nodeId)
+{
+    updateNodeId();
+}
+
+void MeshNetwork::newConnection(uint32_t nodeId)
+{
+    updateNodeId();
+}
+
+void MeshNetwork::updateNodeId(void)
+{
+    std::list<uint32_t> nodeids = m_mesh.getNodeList();
+    nodeids.push_back(m_mesh.getNodeId());
+    if (nodeids.size() > 0)
+    {
+        nodeids.sort();
+        int32_t count=0;
+        for (auto const& i : nodeids) {
+            if (i == m_mesh.getNodeId())
+            {
+                _internalId = count;
+                MY_DEBUG_PRINTF("new Internal Id %X\n",_internalId);
+                break;
+            }
+
+            count++;
+        }
+    }
+}
+void MeshNetwork::meshChanged(void)
+{
+    updateNodeId();
+}
+
 
 
 } // namespace Facilities
