@@ -62,15 +62,18 @@ wdt_disable();
         MY_DEBUG_PRINTLN(F("GOT A REQUEST"));
     });
 
-    server.on("/", HTTP_POST, [&](AsyncWebServerRequest *request){
+    server.on("/image", HTTP_POST, [&](AsyncWebServerRequest *request){
         int params = request->params();
         MY_DEBUG_PRINTLN(F("GOT PARAMS"));
         MY_DEBUG_PRINTLN(params);
         if(params) {
+            image = request->getParam(0)->value();
             MY_DEBUG_PRINTLN(request->getParam(0)->name());
-            MY_DEBUG_PRINTLN(request->getParam(0)->value());
+            MY_DEBUG_PRINTLN(image);
+            request->send(200);
+        } else {
+            request->send(204);
         }
-        request->send(200);
         // if (request->hasArg("BROADCAST")){
         // String msg = request->arg("BROADCAST");
         // mesh.sendBroadcast(msg);
