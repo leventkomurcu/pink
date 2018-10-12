@@ -93,7 +93,7 @@ uint8_t image[4][32];
 const int pid=0;
 //! Initializes the LED Matrix display.
 ExampleDisplayTask::ExampleDisplayTask(Facilities::MeshNetwork& mesh) :
-   Task(POLL_DELAY_MS , TASK_FOREVER, std::bind(&ExampleDisplayTask::execute, this)),
+   Task(1 , TASK_FOREVER, std::bind(&ExampleDisplayTask::execute, this)),
    m_mesh(mesh),
    m_lmd(LEDMATRIX_SEGMENTS, LEDMATRIX_CS_PIN),
    m_x(0)
@@ -120,7 +120,7 @@ void ExampleDisplayTask::execute()
     if (m_image_index != imageId)
     {   
 
-        if (count < 10)
+        if (count < 1000)
         {
             imageId = BLANK;
             count ++;
