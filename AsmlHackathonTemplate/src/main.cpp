@@ -7,6 +7,7 @@
 #include "Tasks_ExampleTransmitTask.hpp"
 #include "Tasks_ExampleDisplayTask.hpp"
 #include <ESPAsyncWebServer.h>
+#include <ArduinoJson.h>
 
 // Translation unit local variables
 namespace {
@@ -35,8 +36,16 @@ void setup()
    exampleDisplayTask.enable();
 
     //Async webserver
-    server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-        request->send(200, "text/html", "<form>Text to Broadcast<br><input type='text' name='BROADCAST'><br><br><input type='submit' value='Submit'></form>");
+    server.on("/", HTTP_GET, [&](AsyncWebServerRequest *request){
+        list<uint32_t> nodeList = meshNetwork.m_mesh.getNodeList();
+
+        StaticJsonBuffer<500> jsonBuffer;
+        JsonObject& root = jsonBuffer.createObject();
+        root["poolSize"] = (int)nodeList.size();
+        root["currentTime"] = (int)meshNetwork.m_mesh.getNodeTime();
+        String s;
+        root.printTo(s);
+        request->send(200, "application/json", s);
         // if (request->hasArg("BROADCAST")){
         // String msg = request->arg("BROADCAST");
         // mesh.sendBroadcast(msg);
