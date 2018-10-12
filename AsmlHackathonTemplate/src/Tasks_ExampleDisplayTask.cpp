@@ -24,31 +24,34 @@ const int ExampleDisplayTask::LEDMATRIX_INTENSITY = 5;
 const int ExampleDisplayTask::LEDMATRIX_CS_PIN = 16;
 const unsigned long ExampleDisplayTask::POLL_DELAY_MS = 100;
 
-int m_cross[32][32];
-int m_full[32][32];
+int m_image[6][32][32];
+int m_image_index = 0;
+const int BLANK = 0;
+const int CROSS = 1;
+const int MAX_DISK = 2;
 
 void init_figures() {
     for (int i = 0; i < 32; i++) {
         for (int j = 0; j < 32; j++) {
             if (i == j || i == 31 - j) {
-                m_cross[i][j] = 1;
+                m_image[CROSS][i][j] = 1;
             } else {
-                m_cross[i][j] = 0;
+                m_image[CROSS][i][j] = 0;
             }
         }
     }
 
     double mx = 15.5;
     double my = 15.5;
-    double r = 15.8;
+    double r = 15.9;
     for (int x = 0; x < 32; x++) {
         for (int y = 0; y < 32; y++) {
             double dx = abs(x - mx);
             double dy = abs(y - my);
             if (dx * dx + dy * dy <= r*r) {
-                m_full[x][y] = 1;
+                m_image[MAX_DISK][x][y] = 1;
             } else {
-                m_full[x][y] = 0;
+                m_image[MAX_DISK][x][y] = 0;
             }
         }
     }
@@ -69,7 +72,6 @@ ExampleDisplayTask::ExampleDisplayTask(Facilities::MeshNetwork& mesh) :
    m_lmd.display();
    init_figures();
    m_mesh.onReceive(std::bind(&ExampleDisplayTask::receivedCb, this, std::placeholders::_1, std::placeholders::_2));
-
 }
 
 //! Update display
@@ -95,7 +97,7 @@ void ExampleDisplayTask::execute()
         m_lmd.clear();
         for (int cx = 0; cx < 32; cx++) {
             for (int cy = 0; cy < 8; cy++) {
-                m_lmd.setPixel(cx, cy, m_full[cx][currentId * 8 + cy]);
+                m_lmd.setPixel(cx, cy, m_image[m_image_index][cx][currentId * 8 + cy]);
             }
         }
         m_lmd.display();
@@ -104,24 +106,12 @@ void ExampleDisplayTask::execute()
 
 void ExampleDisplayTask::receivedCb(Facilities::MeshNetwork::NodeId nodeId, String& msg)
 {
-    if (msg.startsWith("C0"))
-    {
-
-    }else if (msg.startsWith("C1"))
-    {
-
-
-
+    if (msg.length() == 2) {
+        // I0 I1 I2 ...
+        if (msg[0] == 'I') {
+            m_image_index = msg[1] - '0';
+        }
     }
-    else if (msg.startsWith("C2"))
-    {
-
-    }
-    else if (msg.startsWith("C3"))
-    {
-
-    }
-
    //MY_DEBUG_PRINTLN("Received data in ExampleDisplayTask");
    
 }

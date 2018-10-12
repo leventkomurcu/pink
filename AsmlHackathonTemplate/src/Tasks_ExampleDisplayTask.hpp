@@ -45,7 +45,6 @@ private:
 
    Facilities::MeshNetwork& m_mesh;
    LEDMatrixDriver m_lmd;
-    uint8_t m_image[4][32];
    int m_x;
 
    void receivedCb(Facilities::MeshNetwork::NodeId nodeId, String& msg);
