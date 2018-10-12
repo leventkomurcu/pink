@@ -26,7 +26,7 @@ void ExampleTransmitTask::execute()
 {
    String msg = F("Ping from node ");
    msg += m_mesh.getMyNodeId();
-   m_mesh.sendBroadcast( msg );
+   // m_mesh.sendBroadcast( msg );
 }
 
 } // namespace Tasks
