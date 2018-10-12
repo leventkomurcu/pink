@@ -45,14 +45,11 @@ ExampleDisplayTask::ExampleDisplayTask(Facilities::MeshNetwork& mesh) :
 void ExampleDisplayTask::execute()
 {
    m_lmd.clear();
-   for (int x=0;x<8;x++)
+   for (int x=0;x<31;x++)
     {
-        for (int y=0;y<32;y++)
+        for (int y=0;y<7;y++)
         {
-            if (image[pid][x][y])
-                m_lmd.setPixel(x,y,true);
-            else
-                m_lmd.setPixel(x,y,false);
+            m_lmd.setPixel(x,y,(x+y)%2);
         }
             
     }
