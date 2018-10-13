@@ -1,0 +1,238 @@
+<html>
+<head>
+<title>ASML Hackathon 2018 - Pink Team</title>
+<style type="text/css">
+  body {
+  font-family: Georgia, "Times New Roman",
+          Times, serif;
+    color: black;
+    background-color: #eeeeee }
+</style>
+
+<script>
+var nodes = [];
+function sendData(data)
+{
+	var client = new XMLHttpRequest();
+    client.open("POST", "/log", false); // third parameter indicates sync xhr. :(
+    client.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
+    client.send(data);
+}
+function getStyle(selected)
+{
+	var str = "margin-top:-2px;border-style: solid;border-width: 1px;display:inline-block;width:10px;height:10px;";
+	if (selected)
+		return "background:red;" + str;
+	else
+		return "background:transparent;" + str;
+}
+function isBoxSelected(x,y)
+{
+	return nodes[x][y];
+}
+function setNode(n,v)
+{
+	var el = document.getElementById("N"+n);
+	var str = "padding:2px;font-weight: bold;display:inline-block;width:150px;height:auto;";
+	if (v)
+		el.setAttribute("style", str+"background:green;");
+	else
+		el.setAttribute("style", str+"background:red;");
+}
+function paintCell(x,y)
+{
+	var el = document.getElementById(x+"_"+y);
+    style = window.getComputedStyle(el);
+	
+    if (nodes[x][y])
+	{
+		el.setAttribute("style", getStyle(false));
+		nodes[x][y] = false;
+	}
+	else
+	{
+		el.setAttribute("style", getStyle(true));
+		nodes[x][y] = true;
+	}
+}
+window.onload = function(e){
+	var str = '<table>';
+    for (i=0;i<32;i++)
+	{
+		str += '<tr style="margin:0px; padding:-2px">';
+		nodes[i] = [];
+		for (j=0;j<32;j++)
+		{
+			nodes[i][j] = false;
+			var st = getStyle(false);
+			str +='<td style="'+st+'" onClick="paintCell('+i+','+j+');" id="'+i+'_'+j+'"></td>';
+		}
+		str += '</tr>';
+	}
+	str+= '</table>';
+	document.getElementById("canvas").innerHTML = str;
+	
+	for (i=0;i<4;i++)
+		setNode(i,false);
+		
+	setInterval(poolNodeStatus, 1000);
+	getNodeHistory();
+}
+function decimalToHex(d, padding) {
+    var hex = Number(d).toString(16);
+    padding = typeof (padding) === "undefined" || padding === null ? padding = 2 : padding;
+
+    while (hex.length < padding) {
+        hex = "0" + hex;
+    }
+
+    return hex;
+}
+
+function GetImageData()
+{
+	var data = [];
+	var d = 0;
+	for (i = 0;i<32;i++)
+		data[i] = [];
+	for (x=0;x<32;x++)
+	{
+		for (y=31;y>=0;y--)
+		{
+			if (isBoxSelected(x,y))
+			{
+				d |= 0x01;
+			}
+			
+			d <<= 1;
+			if (y % 8 == 0)
+			{
+				
+				d >>=1;
+				data[x][y/8] = d;
+				d = 0;
+			}
+		}
+	}
+	
+	var str= "";
+	for (x=0;x<32;x++)
+	{
+		for (y = 0;y<4;y++)
+			str += decimalToHex(data[x][y],2).toUpperCase();
+	}
+	return str;
+}
+function setImage(layer)
+{
+	
+	var str= GetImageData();
+	console.log("Implement Set Image " + layer + " data " + str );
+}
+function getImage(layer)
+{
+	console.log("Implement Get Image " + layer);
+}
+function setimgdur(layer)
+{
+	var val = document.getElementById("img"+layer+"Dur").value;
+	console.log("Implement Set Image Dur " + layer + " v " + val);
+}
+function animateAct(what)
+{
+	console.log("Implement Animate Action " + what);
+}
+function setanimtype()
+{
+	var e= document.getElementById("animtype");
+	var type = e.options[e.selectedIndex].value;
+	console.log("Implement Set Animate Type" + type);
+}
+function setanimdur()
+{
+	var val = document.getElementById("animdur").value;
+	console.log("Implement Set Animation Duration " + val);
+}
+function poolNodeStatus()
+{
+	console.log("Implement Pool Node Status");
+	for (i=0;i<4;i++)
+		setNode(i,false);
+		
+	for (i=0;i<4;i++)
+	{
+		document.getElementById("N"+i+"_fps").innerHTML="0";
+		document.getElementById("N"+i+"_missed").innerHTML="0";
+	}
+}
+function getNodeHistory()
+{
+	var str = "";
+	for (i=0;i<10;i++)
+	{
+		str += "<span>Implement Node History List</span><br>";
+	}
+	document.getElementById("nodehistory").innerHTML = str;
+}
+
+</script>
+</head>
+
+<body>
+<table width="100%">
+	<tr><td colspan="3">
+		<center><h1>ASML Hackathon 2018 <span style="color:hotpink;">Pink Team</span></h1></center>
+	</td>
+	</tr>
+	<tr><td>
+		<center id="canvas"></center>
+	</td>
+	<td>
+		<h3>Image Control</h3>
+		<button onclick="setImage('A');">Set As Image A</button><br>
+		<button onclick="setImage('B');">Set As Image B</button><br>
+		<button onclick="getImage('A');">Read Image A</button><br>
+		<button onclick="getImage('B');">Read Image B</button><br>
+		
+		<h3>Image Parameters</h3>
+		<input id="imgADur" value="100"></input><button onclick="setimgdur('A')">Set Image A Duration</button><br>
+		<input id="imgBDur" value="100"></input><button onclick="setimgdur('B')">Set Image B Duration</button>
+		
+		
+		<h3>Animation Control</h3>
+		<button onclick="animateAct('P')";>Pause Animation</button><br>
+		<button onclick="animateAct('R')";>Resume Animation</button>
+		<h3>Animation Parameters</h3>
+		<select id="animtype">
+			<option value="0">Ease In/Out</option>
+			<option value="1">Fast In Ease Out</option>
+			<option value="2">Ease In Fase Out</option>
+		</select><button onclick="setanimtype()">Set Animation Type</button><br><br>
+		
+		<input id="animdur" value="100"></input><button onclick="setanimdur()">Set Animation Duration</button>
+	</td>
+	<td>
+		<table width="100%" height="100%" valign="top">
+		<tr><td>
+		<h2>Node Status</h2>
+		</td></tr>
+		<tr><td>
+			<div id="N0" style="">Node 0<br><br>Frame Rate:<span id="N0_fps"></span><br>Missed:<span id="N0_missed"></span></div>
+			<div id="N1" style="">Node 1<br><br>Frame Rate:<span id="N1_fps"></span><br>Missed:<span id="N1_missed"></div>
+			<div id="N2" style="">Node 2<br><br>Frame Rate:<span id="N2_fps"></span><br>Missed:<span id="N2_missed"></div>
+			<div id="N3" style="">Node 3<br><br>Frame Rate:<span id="N3_fps"></span><br>Missed:<span id="N3_missed"></div>
+		</td></tr>
+		<tr><td>
+		<h2>Node History</h2>
+		</td></tr>
+		<tr><td id="nodehistory">
+		</td></tr>
+		</table>
+	</td></tr>
+
+</table>
+
+
+</body>
+
+</html>
