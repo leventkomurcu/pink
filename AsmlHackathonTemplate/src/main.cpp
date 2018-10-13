@@ -43,7 +43,7 @@ wdt_disable();
         StaticJsonBuffer<100> jsonBuffer;
         JsonObject& root = jsonBuffer.createObject();
         root["poolSize"] = (int)nodeList.size() + 1;
-        root["currentTime"] = (int)meshNetwork.m_mesh.getNodeTime();
+        root["currentTime"] = (long long)meshNetwork.m_mesh.getNodeTime();
         
         if (request->hasArg("IMAGE")){
             image = request->arg("IMAGE");
