@@ -20,7 +20,7 @@ namespace Tasks {
 const int ExampleDisplayTask::LEDMATRIX_WIDTH = 31;
 const int ExampleDisplayTask::LEDMATRIX_HEIGHT = 7;
 const int ExampleDisplayTask::LEDMATRIX_SEGMENTS = 4;
-const int ExampleDisplayTask::LEDMATRIX_INTENSITY = 5;
+const int ExampleDisplayTask::LEDMATRIX_INTENSITY = 10;
 const int ExampleDisplayTask::LEDMATRIX_CS_PIN = 16;
 const unsigned long ExampleDisplayTask::POLL_DELAY_MS = 100;
 
@@ -96,6 +96,7 @@ ExampleDisplayTask::ExampleDisplayTask(Facilities::MeshNetwork& mesh) :
    Task(1 , TASK_FOREVER, std::bind(&ExampleDisplayTask::execute, this)),
    m_mesh(mesh),
    m_lmd(LEDMATRIX_SEGMENTS, LEDMATRIX_CS_PIN),
+  
    m_x(0)
 {
    m_lmd.setEnabled(true);
@@ -104,6 +105,18 @@ ExampleDisplayTask::ExampleDisplayTask(Facilities::MeshNetwork& mesh) :
    m_lmd.display();
    init_figures();
    m_mesh.onReceive(std::bind(&ExampleDisplayTask::receivedCb, this, std::placeholders::_1, std::placeholders::_2));
+    _animationCount=3000;
+}
+
+void ExampleDisplayTask::UpdateImage(int currentId,int imageId)
+{
+    m_lmd.clear();
+    for (int cx = 0; cx < 32; cx++) {
+          for (int cy = 0; cy < 8; cy++) {
+             m_lmd.setPixel(cx, cy, m_image[imageId][cx][currentId * 8 + cy]);
+         }
+    }
+        m_lmd.display();
 }
 
 //! Update display
@@ -119,15 +132,23 @@ void ExampleDisplayTask::execute()
     
     if (m_image_index != imageId)
     {   
-
-        if (count < 1000)
+        if (count < _animationCount)
         {
-            imageId = BLANK;
+            if (count <= (_animationCount/2))
+            {
+                if (count % (_animationCount/20)==0)
+                    m_lmd.setIntensity(10-(count/(_animationCount/20)));
+            }
+            else
+            {
+                if (count == (_animationCount/2)+1)
+                    UpdateImage(currentId,imageId);
+                if ((count % (_animationCount/20))==0)
+                    m_lmd.setIntensity((count/(_animationCount/20))-10);
+            }
             count ++;
         }
-            
         else{
-
             imageId= m_image_index;
             count=0;
         }
@@ -141,15 +162,7 @@ void ExampleDisplayTask::execute()
    m_lmd.display();*/
 
    
-    if (currentId >= 0) {
-        m_lmd.clear();
-        for (int cx = 0; cx < 32; cx++) {
-            for (int cy = 0; cy < 8; cy++) {
-                m_lmd.setPixel(cx, cy, m_image[imageId][cx][currentId * 8 + cy]);
-            }
-        }
-        m_lmd.display();
-    }
+
 }
 
 void ExampleDisplayTask::receivedCb(Facilities::MeshNetwork::NodeId nodeId, String& msg)

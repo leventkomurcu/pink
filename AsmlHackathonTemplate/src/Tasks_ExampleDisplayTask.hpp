@@ -34,7 +34,7 @@ public:
 	ExampleDisplayTask& operator=(const ExampleDisplayTask& other) = delete;
 
    void execute();
-
+    int _animationCount;
 private:
    static const int LEDMATRIX_WIDTH;
    static const int LEDMATRIX_HEIGHT;
@@ -48,7 +48,7 @@ private:
    int m_x;
 
    void receivedCb(Facilities::MeshNetwork::NodeId nodeId, String& msg);
-
+    void UpdateImage(int currentId,int imageId);
 
 };
 
