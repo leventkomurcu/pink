@@ -86,7 +86,7 @@ void init_figures() {
     }
     for (int i = 0; i < 32; i++) {
         for (int j = SuperManInd[1][i]; j <= SuperManInd[2][i]; j++) {
-                m_image[SUPERMAN][SuperManInd[0][i]][j] = 1;
+                m_image[SUPERMAN][SuperManInd[0][i]][j-1] = 1;
         }
     }
     fill_face();
