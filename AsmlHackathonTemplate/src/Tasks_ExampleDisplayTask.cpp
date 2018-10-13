@@ -25,7 +25,7 @@ const int ExampleDisplayTask::LEDMATRIX_CS_PIN = 16;
 const unsigned long ExampleDisplayTask::POLL_DELAY_MS = 100;
 
 char m_image[6][32][32];
-int m_image_index = 0;
+int m_image_index = 3;
 const int BLANK = 1;
 const int CROSS = 0;
 const int MAX_DISK = 2;
@@ -194,14 +194,6 @@ void ExampleDisplayTask::execute()
         }
     }
 
-  /* m_lmd.clear();
-   for (int x=0;x<31;x++)
-    {
-        m_lmd.setColumn(x,image[0][x]);
-    }
-   m_lmd.display();*/
-
-   
 
 }
 

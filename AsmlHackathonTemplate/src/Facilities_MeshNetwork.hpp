@@ -42,6 +42,7 @@ public:
 
    painlessMesh       m_mesh;
 int32_t _internalId;
+uint32_t _globalMeshId;
    void receivedCb(NodeId transmitterNodeId, String& msg);
 private:
    

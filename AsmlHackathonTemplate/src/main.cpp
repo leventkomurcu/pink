@@ -47,7 +47,6 @@ wdt_disable();
         root["poolSize"] = (int)nodeList.size() + 1;
         root["currentTime"] = (int)meshNetwork.m_mesh.getNodeTime();
         root["APIP"] = meshNetwork.m_mesh.getAPIP().toString();
-
         if (request->hasArg("IMAGE")){
             image = request->arg("IMAGE");
             meshNetwork.m_mesh.sendBroadcast(image,true);

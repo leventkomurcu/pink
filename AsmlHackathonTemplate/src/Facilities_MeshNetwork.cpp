@@ -89,24 +89,24 @@ void MeshNetwork::newConnection(uint32_t nodeId)
 
 void MeshNetwork::updateNodeId(void)
 {
-    /*std::list<uint32_t> nodeids = m_mesh.getNodeList();
+    std::list<uint32_t> nodeids = m_mesh.getNodeList();
     nodeids.push_back(m_mesh.getNodeId());
     if (nodeids.size() > 0)
     {
         nodeids.sort();
         int32_t count=0;
         for (auto const& i : nodeids) {
-            MY_DEBUG_PRINTF(" %X\n",i);
+           
             if (i == m_mesh.getNodeId())
             {
-                = count;
-                MY_DEBUG_PRINTF("new Internal Id %X\n",_internalId);
-                //break;
+                 MY_DEBUG_PRINTF(" %X\n",i);
+                _globalMeshId = i;
+                break;
             }
 
             count++;
         }
-    }*/
+    }
 }
 void MeshNetwork::meshChanged(void)
 {
