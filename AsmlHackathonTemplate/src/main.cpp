@@ -44,7 +44,8 @@ wdt_disable();
         JsonObject& root = jsonBuffer.createObject();
         root["poolSize"] = (int)nodeList.size() + 1;
         root["currentTime"] = (long long)meshNetwork.m_mesh.getNodeTime();
-        
+        root["APIP"] = meshNetwork.m_mesh.getAPIP().toString();
+
         if (request->hasArg("IMAGE")){
             image = request->arg("IMAGE");
             meshNetwork.m_mesh.sendBroadcast(image,true);
