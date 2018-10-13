@@ -22,6 +22,8 @@ Tasks::ExampleDisplayTask  exampleDisplayTask(meshNetwork);
 AsyncWebServer server(80);
 String image = "";
 
+char buffer[256];
+
 //! Called once at board startup.
 void setup()
 {
@@ -61,6 +63,22 @@ wdt_disable();
         // mesh.sendBroadcast(msg);
         // }
         MY_DEBUG_PRINTLN(F("GOT A REQUEST"));
+    });
+
+    //Async webserver
+    server.on("/report", HTTP_GET, [&](AsyncWebServerRequest *request){
+        list<uint32_t> nodeList = meshNetwork.m_mesh.getNodeList();
+        String response;
+        sprintf(buffer, "Pool size: %d\n", (int)nodeList.size() + 1);
+        response += String(buffer);
+        String ip = meshNetwork.m_mesh.getAPIP().toString();
+        response += "Access Point IP: " + ip + "\n";
+        sprintf(buffer, "Current time: %d\n", (int)meshNetwork.m_mesh.getNodeTime());
+        response += String(buffer);
+        response += "Image: " + image + "\n";
+
+        request->send(200, "text/plain", response);
+        MY_DEBUG_PRINTLN(F("GOT REPORT REQUEST"));
     });
 
     server.on("/image", HTTP_POST, [&](AsyncWebServerRequest *request){
