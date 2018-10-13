@@ -28,7 +28,7 @@ char buffer[256];
 void setup()
 {
    MY_DEBUG_BEGIN(115200);
-wdt_disable();
+   wdt_disable();
    // Create MeshNetwork
    meshNetwork.initialize(F("teampink"), F("teampink"), taskScheduler);
 
