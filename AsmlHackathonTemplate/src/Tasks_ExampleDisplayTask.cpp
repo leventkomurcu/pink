@@ -26,12 +26,19 @@ const unsigned long ExampleDisplayTask::POLL_DELAY_MS = 100;
 
 char m_image[6][32][32];
 int m_image_index = 3;
-const int BLANK = 1;
+const int SUPERMAN = 1;
 const int CROSS = 0;
 const int MAX_DISK = 2;
 const int CIRCLE = 3;
 const int DISK_5 = 4;
 const int FACE = 5;
+
+const int SuperManInd[3][32] = {{9,10,11,11,11,12,12,12,12,13,13,13,13,
+     14,14,14, 15,15, 16, 17,17, 18,18,18, 19, 20, 21,21, 22,22, 23,24},
+                               {9,8,7,10,24,6,9,22,26, 5,9,22,27,
+     6,9,26, 7,25, 8, 9,9, 10,13,20, 11, 12, 13,19, 14,18, 15, 16},
+                      {24,25,8,22,26,7,11,24,27, 6,11,24,28,
+     7,21,27, 22,26, 25, 10,24, 11,14,23, 22, 21, 14,20, 15, 19, 18, 17}};
 
 void fill_face_circle(double mx, double my, double r, int how) {
     for (int x = 0; x < 32; x++) {
@@ -72,6 +79,16 @@ void fill_face() {
 }
 
 void init_figures() {
+     for (int i = 0; i < 32; i++) {
+        for (int j = 0; j < 32; j++) {
+            m_image[SUPERMAN][i][j] = 0;
+        }
+    }
+    for (int i = 0; i < 32; i++) {
+        for (int j = SuperManInd[1][i]; j <= SuperManInd[2][i]; j++) {
+                m_image[SUPERMAN][SuperManInd[0][i]][j] = 1;
+        }
+    }
     fill_face();
     for (int i = 0; i < 32; i++) {
         for (int j = 0; j < 32; j++) {
