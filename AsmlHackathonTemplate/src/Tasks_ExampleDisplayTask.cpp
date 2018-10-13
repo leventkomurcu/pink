@@ -142,7 +142,7 @@ void ExampleDisplayTask::execute()
             else
             {
                 if (count == (_animationCount/2)+1)
-                    UpdateImage(currentId,imageId);
+                    UpdateImage(currentId,m_image_index);
                 if ((count % (_animationCount/20))==0)
                     m_lmd.setIntensity((count/(_animationCount/20))-10);
             }
