@@ -31,8 +31,48 @@ const int CROSS = 0;
 const int MAX_DISK = 2;
 const int CIRCLE = 3;
 const int DISK_5 = 4;
+const int FACE = 5;
+
+void fill_face_circle(double mx, double my, double r, int how) {
+    for (int x = 0; x < 32; x++) {
+        for (int y = 0; y < 32; y++) {
+            double dx = abs(x - mx);
+            double dy = abs(y - my);
+            if (dx*dx + dy*dy <= r*r) {
+                m_image[FACE][x][y] = how;
+            }
+        }
+    }
+}
+ 
+void fill_face() {
+    for (int x = 0; x < 32; x++) {
+        for (int y = 0; y < 32; y++) {
+            m_image[FACE][x][y] = 0;
+        }
+    }
+    double mx = 15.5;
+    double my = 15.5;
+    double r = 15.955;
+    fill_face_circle(mx, my, r, 1);
+    fill_face_circle(8, my - 4.5, 2.5, 0);
+    fill_face_circle(8, my + 4.5, 2.5, 0);
+    for (int x = 20; x < 22; x++) {
+        int q = 10;
+        for (int y = q; y < 32 - q; y++) {
+            m_image[FACE][x][y] = 0;
+        }
+    }
+    for (int x = 22; x < 24; x++) {
+        int q = 12;
+        for (int y = q; y < 32 - q; y++) {
+            m_image[FACE][x][y] = 0;
+        }
+    }
+}
 
 void init_figures() {
+    fill_face();
     for (int i = 0; i < 32; i++) {
         for (int j = 0; j < 32; j++) {
             if (i == j || i == 31 - j) {
